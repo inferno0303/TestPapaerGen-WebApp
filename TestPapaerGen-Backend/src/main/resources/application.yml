@@ -1,0 +1,29 @@
+spring:
+#  http:
+#    encoding:
+#      force: true
+#      charset: UTF-8
+#      enabled: true
+  datasource:
+    url: jdbc:mysql://s1.imyx.top:3306/TestPaperGeneration?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: root
+    password: Teemo1234
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      max-lifetime: 30000
+      minimum-idle: 3
+      maximum-pool-size: 10
+      connection-test-query: SELECT 1
+      connection-timeout: 5000
+      validation-timeout: 5000
+server:
+  port: 8081
+#  tomcat:
+#    uri-encoding: UTF-8
+mybatis:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  # 指定全局配置文件位置
+#  config-location: classpath:mybatis/mybatis-config.xml
+  # 指定sql映射文件位置
+  mapper-locations: classpath:mybatis/mapper/*.xml

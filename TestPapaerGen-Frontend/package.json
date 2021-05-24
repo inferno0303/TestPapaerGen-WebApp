@@ -1,0 +1,43 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "umi dev",
+    "build": "umi build",
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
+    "test": "umi-test",
+    "test:coverage": "umi-test --coverage"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "dependencies": {
+    "@umijs/preset-react": "1.x",
+    "@umijs/test": "^3.0.14",
+    "echarts": "^4.7.0",
+    "echarts-for-react": "^2.0.15-beta.1",
+    "lint-staged": "^10.0.7",
+    "moment": "^2.24.0",
+    "prettier": "^1.19.1",
+    "rc-queue-anim": "^1.8.4",
+    "rc-texty": "^0.2.0",
+    "rc-tween-one": "latest",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-highlight-words": "^0.16.0",
+    "umi": "^3.0.14",
+    "yorkie": "^2.0.0",
+    "antd": "latest"
+  },
+  "devDependencies": {
+    "enquire-js": "^0.2.1",
+    "rc-scroll-anim": "^2.7.4"
+  }
+}

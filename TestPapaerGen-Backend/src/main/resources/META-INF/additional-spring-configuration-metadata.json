@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "mybatis.config-location.classpath",
+      "type": "java.lang.String",
+      "description": "Description for mybatis.config-location.classpath."
+  }
+] }

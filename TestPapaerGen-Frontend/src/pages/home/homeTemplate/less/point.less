@@ -1,0 +1,61 @@
+@import './custom.less';
+@point: point;
+.@{point} {
+  float: left;
+  width: 8px;
+  height: 8px;
+  opacity: .5;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: opacity .3s @ease-out, background .3s @ease-out;
+  margin: 6px auto;
+  background: @primary-color;
+  border-radius: 100%;
+  &.active {
+    opacity: 1;
+    background: @primary-color;
+  }
+  &-wrapper {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    right: 16px;
+    width: 10px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    pointer-events: none;
+  }
+  &-left {
+    left: 16px;
+  }
+  &-rect {
+    border-radius: 0;
+  }
+  &-prismatic {
+    border-radius: 0;
+    transform: rotate(45deg);
+  }
+  &-stroke {
+    border: 2px solid @primary-color;
+    background: transparent;
+  }
+  &-small {
+    width: 6px;
+    &.point {
+      height: 6px;
+    }
+  }
+  &-large {
+    width: 10px;
+    &.point {
+      height: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .@{point}-wrapper {
+    display: none;
+  }
+}

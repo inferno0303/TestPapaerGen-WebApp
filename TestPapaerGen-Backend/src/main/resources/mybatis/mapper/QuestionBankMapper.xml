@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teemo.testpapergeneration.mapper.QuestionBankMapper">
+
+    <select id="getAvgDifficultyByIds" parameterType="java.util.List" resultType="java.lang.Double">
+        SELECT AVG(difficulty) FROM QuestionBank where id in
+        <if test="ids!=null and ids!='' and ids.size()>0">
+            <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+        </if>
+    </select>
+
+    <select id="getQuestionBankByIds" parameterType="List" resultType="com.teemo.testpapergeneration.entity.QuestionBank">
+        SELECT * FROM QuestionBank
+        <where>
+            <if test="ids!=null and ids!='' and ids.size()>0">
+                and id not in
+                <foreach collection="ids" item="id" index="index" open="(" separator="," close=")">#{id}</foreach>
+            </if>
+            <if test="generateRange.size()>0">
+                and label_1 in
+                <foreach collection="generateRange" item="eachLabel1" open="(" separator="," close=")">#{eachLabel1}</foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="getAll" resultType="com.teemo.testpapergeneration.entity.QuestionBank">
+        SELECT * from QuestionBank
+    </select>
+
+</mapper>

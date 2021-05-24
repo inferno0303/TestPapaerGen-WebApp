@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teemo.testpapergeneration.mapper.QuestionGenHistoryMapper">
+
+    <insert id="insertQuestionGenHistories" parameterType="java.util.List">
+        insert into QuestionGenHistory
+        (
+        test_paper_uid,
+        test_paper_name,
+        question_bank_id,
+        topic,
+        topic_material_id,
+        answer,
+        topic_type,
+        score,
+        difficulty,
+        chapter_1,
+        chapter_2,
+        label_1,
+        label_2,
+        update_time
+        )
+        values
+        <foreach collection="list" item="item" index= "index" separator =",">
+            (
+            #{item.test_paper_uid},
+            #{item.test_paper_name},
+            #{item.question_bank_id},
+            #{item.topic},
+            #{item.topic_material_id},
+            #{item.answer},
+            #{item.topic_type},
+            #{item.score},
+            #{item.difficulty},
+            #{item.chapter_1},
+            #{item.chapter_2},
+            #{item.label_1},
+            #{item.label_2},
+            #{item.update_time}
+            )
+        </foreach>
+    </insert>
+
+</mapper>
