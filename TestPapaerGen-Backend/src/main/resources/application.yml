@@ -5,7 +5,7 @@ spring:
 #      charset: UTF-8
 #      enabled: true
   datasource:
-    url: jdbc:mysql://s1.imyx.top:3306/TestPaperGeneration?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    url: jdbc:mysql://go.imyx.top:3306/test_paper_generation?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
     username: root
     password: Teemo1234
     driver-class-name: com.mysql.jdbc.Driver

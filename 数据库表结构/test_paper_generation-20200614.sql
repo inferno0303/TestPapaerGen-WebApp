@@ -1,18 +1,5 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : 阿里云MySQL@3306
- Source Server Type    : MySQL
- Source Server Version : 50729
- Source Host           : aly1.imyx.top:3306
- Source Schema         : TestPaperGeneration
-
- Target Server Type    : MySQL
- Target Server Version : 50729
- File Encoding         : 65001
-
- Date: 14/06/2020 18:29:56
-*/
+CREATE DATABASE IF NOT EXISTS `test_paper_generation` DEFAULT CHARACTER SET utf8mb4;
+USE `test_paper_generation`;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
