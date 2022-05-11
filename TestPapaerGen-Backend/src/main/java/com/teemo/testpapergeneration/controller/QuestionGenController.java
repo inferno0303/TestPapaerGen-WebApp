@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -127,7 +128,8 @@ public class QuestionGenController {
     }
 
     @PostMapping(value = "/questionGen")
-    public String questionGen(@RequestBody String payload) throws IOException {
+    public String questionGen(@RequestBody String payload, HttpServletRequest request) throws IOException {
+        String username = request.getSession().getAttribute("username").toString();
 
         // 0、序列化 RequestBody
         JSONObject payloadInJSON = JSONObject.parseObject(payload);
@@ -201,7 +203,7 @@ public class QuestionGenController {
             else return myJsonResponse.make200Resp(MyJsonResponse.default_500_response, "传参错误，非法Id：" + eachId);
         }
         System.out.println(questionBanks.size());
-        genWord.genWordTest(questionBanks, testPaperName);
+        genWord.genWordTest(questionBanks, testPaperName, username);
         return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, null);
     }
 
@@ -216,7 +218,7 @@ public class QuestionGenController {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        headers.add("Content-Disposition", "attachment; filename=" + System.currentTimeMillis() + ".xml");
+        headers.add("Content-Disposition", "attachment; filename=TestPaper-" + System.currentTimeMillis() + ".docx");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
         headers.add("Last-Modified", new Date().toString());

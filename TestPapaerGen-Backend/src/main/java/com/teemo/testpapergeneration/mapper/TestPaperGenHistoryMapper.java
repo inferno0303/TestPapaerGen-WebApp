@@ -12,9 +12,9 @@ import java.util.List;
 public interface TestPaperGenHistoryMapper {
 
     @Insert("insert into TestPaperGenHistory" +
-            "(test_paper_uid, test_paper_name, question_count, average_difficulty, update_time)" +
+            "(test_paper_uid, test_paper_name, question_count, average_difficulty, update_time, username)" +
             "values" +
-            "(#{test_paper_uid}, #{test_paper_name}, #{question_count}, #{average_difficulty}, #{update_time})")
+            "(#{test_paper_uid}, #{test_paper_name}, #{question_count}, #{average_difficulty}, #{update_time}, #{username})")
     public Integer insertTestPaperGenHistory(TestPaperGenHistory testPaperGenHistory);
 
     @Select("select * from TestPaperGenHistory order by update_time desc")

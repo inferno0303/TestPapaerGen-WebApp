@@ -42,6 +42,7 @@ public class GenWord {
     public static String getHomePath() {
         return HOME_PATH;
     }
+    private static File resultFile = null;
 
     public static String getTemplatePath() {
         // 返回时/tmp/形式的，注意最后面有 /
@@ -49,12 +50,28 @@ public class GenWord {
     }
 
     public File getFile() {
-      return new File(getHomePath().concat("\\试卷.xml"));
+        if (resultFile != null) {
+            return resultFile;
+        } else {
+            return null;
+        }
+//      return new File(getHomePath().concat("\\testPaper.xml"));
     };
 
-    public void genWordTest(List<QuestionBank> questionBanks, String test_paper_name) throws IOException {
+    public void genWordTest(List<QuestionBank> questionBanks, String test_paper_name, String username) throws IOException {
         // step0 准备输出流
-        File file = new File(getHomePath().concat("\\试卷.xml"));
+        if (resultFile != null) {
+            try {
+                boolean delete = resultFile.delete();
+                if (delete) {
+                    System.out.println("deete temp file ok");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        File file = File.createTempFile("testPaper", ".xml");
+//        File file = new File(getHomePath().concat("\\试卷.xml"));
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
         BufferedWriter bufferedWriter = new BufferedWriter(writer);
@@ -82,17 +99,18 @@ public class GenWord {
             // step5 输出文件
             template.process(dataModel, bufferedWriter);
             // step 6 记录历史
-            this.logHistory(questionBanks, test_paper_name);
+            this.logHistory(questionBanks, test_paper_name, username);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             bufferedWriter.close();
             fileOutputStream.close();
+            resultFile = file;
         }
     }
 
     // 记录历史
-    private void logHistory(List<QuestionBank> questionBanks, String test_paper_name) {
+    private void logHistory(List<QuestionBank> questionBanks, String test_paper_name, String username) {
         TestPaperGenHistory testPaperGenHistory = new TestPaperGenHistory();
         // 当前时间
         Date currentTime = new Date();
@@ -110,6 +128,7 @@ public class GenWord {
         }
         testPaperGenHistory.setAverage_difficulty(sum / questionBanks.size());
         testPaperGenHistory.setUpdate_time(currentTime);
+        testPaperGenHistory.setUsername(username);
 
         // 写题目历史记录 QuestionGenHistory 表
         List<QuestionGenHistory> questionGenHistoryList = new ArrayList<>();

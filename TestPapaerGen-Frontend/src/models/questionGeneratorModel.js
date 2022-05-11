@@ -77,6 +77,10 @@ export default {
         isArray(testPaperGenList) ? testPaperGenList.forEach(item => {questionIdList.push(item.id)}) : null;
         postPayload["questionIdList"] = questionIdList;
         postPayload["testPaperName"] = payload.testPaperName;
+        postPayload["TKTIdList"] = [];
+        postPayload["XZTIdList"] = [];
+        postPayload["PDTIdList"] = [];
+        postPayload["JDTIdList"] = [];
         if (payload.randomSwitch) {
           // 填空题Ids
           const TKTList = yield select(state => state.questionGenerator.TKTList);

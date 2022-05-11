@@ -59,41 +59,7 @@ export default class HomeTemplate extends React.Component {
         key="Banner5_0"
         dataSource={Banner50DataSource}
         isMobile={this.state.isMobile}
-      />,
-      <Feature4
-        id="Feature4_0"
-        key="Feature4_0"
-        dataSource={Feature40DataSource}
-        isMobile={this.state.isMobile}
-      />,
-      <Feature1
-        id="Feature1_0"
-        key="Feature1_0"
-        dataSource={Feature10DataSource}
-        isMobile={this.state.isMobile}
-      />,
-      <Feature2
-        id="Feature2_0"
-        key="Feature2_0"
-        dataSource={Feature20DataSource}
-        isMobile={this.state.isMobile}
-      />,
-      <Footer0
-        id="Footer0_1"
-        key="Footer0_1"
-        dataSource={Footer01DataSource}
-        isMobile={this.state.isMobile}
-      />, // 导航和页尾不进入锚点区，如果需要，自行添加;
-      <Point
-        key="list"
-        data={[
-          'Banner5_0',
-          'Feature4_0',
-          'Feature1_0',
-          'Feature2_0',
-          'Footer0_1',
-        ]}
-      />,
+      />
     ];
     return (
       <div

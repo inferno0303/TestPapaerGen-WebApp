@@ -49,13 +49,17 @@ class TopMenu extends React.Component {
             <OrderedListOutlined />
             全部试题
           </Menu.Item>
+          {/*<Menu.Item key="/questionManager">*/}
+          {/*  <HistoryOutlined />*/}
+          {/*  题库管理*/}
+          {/*</Menu.Item>*/}
           <Menu.Item key="/questionEdit">
             <EditOutlined />
             题目编辑
           </Menu.Item>
           <Menu.Item key="/questionGenerator">
             <FileAddOutlined />
-            抽取试题
+            组卷系统
           </Menu.Item>
           <Menu.Item key="/questionGenHistory">
             <HistoryOutlined />

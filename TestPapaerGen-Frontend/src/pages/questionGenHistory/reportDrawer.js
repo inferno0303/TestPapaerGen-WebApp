@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'umi';
-import { Button, Descriptions, Divider, Drawer, PageHeader, Popconfirm, Progress } from 'antd';
+import { Button, Descriptions, Divider, Drawer, PageHeader, Popconfirm, Progress, Tag } from 'antd';
 import { myEmptyStatus, renderLoading } from '../../layouts/commonComponents';
 import ReactEcharts from 'echarts-for-react';
 import style from './index.less'
@@ -10,6 +10,14 @@ class ReportDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {}
+  }
+
+  initData = async () => {
+    console.log('------', this.props.testPaperReportQuestionList)
+  };
+
+  componentWillMount() {
+    this.initData().then(() => null)
   }
 
   // 难度数量统计
@@ -123,7 +131,6 @@ class ReportDrawer extends React.Component {
         _total[item.label_1]++
       }
     });
-    console.log(_total, _total.key);
     return {
       tooltip: {
         trigger: 'item',
@@ -158,15 +165,25 @@ class ReportDrawer extends React.Component {
     }
   };
 
+  // 取试卷名字
+  getTestPaperName = () => {
+    if (this.props.testPaperReportQuestionList.length <= 0) return null
+    if (this.props.testPaperReportQuestionList[0].test_paper_name == "") {
+      return "《未命名试卷》";
+    } else {
+      return `《${this.props.testPaperReportQuestionList[0].test_paper_name}》`;
+    }
+  }
+
   render() {
     return (
       <Drawer title={null}
               placement="right"
-              width={550}
+              width={800}
               onClose={this.props.close}
               visible={this.props.visible}
       >
-        <PageHeader title={"试卷详情"} subTitle={'查看试卷详细报告'}/>
+        <PageHeader title={`${this.getTestPaperName()}试卷出题历史记录`} subTitle={'详细记录'}/>
 
         <Divider orientation='left' style={{fontWeight: 'bold'}}>总体难度{this.props.reportDifficulty}</Divider>
         <div className={style.flex_middle}>
@@ -179,6 +196,20 @@ class ReportDrawer extends React.Component {
           <span className={style.text_two_side_padding}>难度5</span>
         </div>
 
+        <Divider orientation='left' style={{fontWeight: 'bold'}}>本试卷共{this.props.testPaperReportQuestionList.length}题</Divider>
+        {
+          this.props.testPaperReportQuestionList.length > 0 ?
+            this.props.testPaperReportQuestionList.map((item, index) => {
+              return <Descriptions span={1} key={index}>
+                <Descriptions.Item contentStyle={{fontSize: "0.8em", color: "gray"}}>
+                  <Tag color="magenta">第{index + 1}题（{item.score}分）</Tag>
+                  {item.topic}
+                </Descriptions.Item>
+              </Descriptions>
+            }) :
+            myEmptyStatus("无数据", "200px")
+        }
+
         <Divider orientation='left' style={{fontWeight: 'bold'}}>难度分布</Divider>
         {this.props.visible ? <ReactEcharts option={this.getOption1()} /> : null}
 
@@ -188,16 +219,8 @@ class ReportDrawer extends React.Component {
         <Divider orientation='left' style={{fontWeight: 'bold'}}>知识点分布</Divider>
         <ReactEcharts option={this.getOption3()} />
 
-        <Divider orientation='left' style={{fontWeight: 'bold'}}>本试卷共{this.props.testPaperReportQuestionList.length}题</Divider>
-        {
-          this.props.testPaperReportQuestionList.length > 0 ?
-            this.props.testPaperReportQuestionList.map((item, index) => {
-              return <Descriptions span={1} key={index}>
-                <Descriptions.Item>{index + 1}、(本题{item.score}分) {item.topic}</Descriptions.Item>
-              </Descriptions>
-            }) :
-            myEmptyStatus("无数据", "200px")
-        }
+        <Divider />
+
       </Drawer>
     )
   }

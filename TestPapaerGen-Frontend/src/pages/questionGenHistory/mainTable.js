@@ -21,9 +21,9 @@ export default class MainTable extends React.Component {
         width: 220,
       },
       {
-        title: '试卷id',
-        dataIndex: 'test_paper_uid',
-        key: 'test_paper_uid',
+        title: '出题人',
+        dataIndex: 'username',
+        key: 'username',
         width: 180,
       },
       {
@@ -56,15 +56,20 @@ export default class MainTable extends React.Component {
         className: style.column_small_text,
         render: (record) => <div>
           <Button type='link' onClick={this.getReport.bind(this, record)}>查看详情</Button>
-          <Popconfirm title={`你确定要删除该历史记录吗？`}
-                      onConfirm={this.deleteRecord.bind(this, record)}
-                      okText="确定"
-                      okButtonProps={{ danger: true }}
-                      cancelText="取消"
-                      placement="rightBottom"
-          >
-            <Button type='link'>删除记录</Button>
-          </Popconfirm>
+          {
+            this.props.username === record.username ?
+              <Popconfirm title={`你确定要删除该历史记录吗？`}
+                          onConfirm={this.deleteRecord.bind(this, record)}
+                          okText="确定"
+                          okButtonProps={{ danger: true }}
+                          cancelText="取消"
+                          placement="rightBottom"
+              >
+                <Button type='link' danger>删除记录</Button>
+              </Popconfirm> :
+              null
+          }
+
         </div>
       },
     ];

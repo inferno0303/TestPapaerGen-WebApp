@@ -44,10 +44,10 @@ class RenderDrawer extends React.Component {
                 onClose={this.props.hide}
                 visible={this.props.show}>
           <div>
-            <PageHeader title={"手动组卷列表"}
-                        subTitle={'手动指定需要组卷的题目'}
+            <PageHeader title={"已手动选择的题目"}
+                        subTitle={'确认完成后请点击「导出word」按钮'}
                         extra={[
-                          <Button type='primary' onClick={this.nextStep} key='1'>下一步</Button>,
+                          <Button type='primary' onClick={this.nextStep} key='1'>导出word</Button>,
                           <Popconfirm title={`你确定要清空组卷列表吗？`}
                                       onConfirm={this.removeAll}
                                       okText="确定"

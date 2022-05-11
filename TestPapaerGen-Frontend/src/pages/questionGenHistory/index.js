@@ -49,19 +49,22 @@ class QuestionGenHistory extends React.Component {
           <MainTable dataSource={this.props.testPaperGenHistories}
                      dispatch={this.props.dispatch}
                      showReportDrawer={this.showReportDrawer}
+                     username={this.props.username}
           />
         </div>
         <ReportDrawer visible={this.state.isReportDrawerVisible}
                       close={this.hideReportDrawer}
+                      destroyOnClose={true}
         />
       </div>
     )
   }
 }
 
-function mapStateToProps({ questionGenHistory }) {
+function mapStateToProps({ questionGenHistory, loginModel }) {
   const { testPaperGenHistories } = questionGenHistory;
-  return { testPaperGenHistories }
+  const { username } = loginModel;
+  return { testPaperGenHistories, username }
 }
 
 export default connect(mapStateToProps)(QuestionGenHistory);

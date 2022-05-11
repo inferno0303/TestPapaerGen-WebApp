@@ -21,10 +21,10 @@
   "dependencies": {
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.14",
-    "echarts": "^4.7.0",
-    "echarts-for-react": "^2.0.15-beta.1",
+    "echarts": "^5.3.2",
+    "echarts-for-react": "^3.0.2",
     "lint-staged": "^10.0.7",
-    "moment": "^2.24.0",
+    "moment": "^2.29.3",
     "prettier": "^1.19.1",
     "rc-queue-anim": "^1.8.4",
     "rc-texty": "^0.2.0",
@@ -32,9 +32,9 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-highlight-words": "^0.16.0",
-    "umi": "^3.0.14",
+    "umi": "^3.5.23",
     "yorkie": "^2.0.0",
-    "antd": "latest"
+    "antd": "^4.20.2"
   },
   "devDependencies": {
     "enquire-js": "^0.2.1",

@@ -3,7 +3,7 @@ import { connect, history } from 'umi';
 import moment from 'moment';
 import { Badge, Button, Input, PageHeader, Popconfirm, Select, Table, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
-import { FileAddOutlined, SearchOutlined } from '@ant-design/icons';
+import { FileAddOutlined, SearchOutlined, PieChartOutlined } from '@ant-design/icons';
 import style from './index.less';
 import { delay } from '../../utils/myUtils';
 import RenderDrawer from './renderDrawer';
@@ -182,7 +182,7 @@ class QuestionBank extends React.Component {
               {
                 this.isInclude(record) ?
                   <Button type='link' onClick={this.handleRemoveTestPaperGenList.bind(this, record)}>移出</Button> :
-                  <Button type='link' onClick={this.handleAddTestPaperGenList.bind(this, record)}>加入</Button>
+                  <Button type='link' onClick={this.handleAddTestPaperGenList.bind(this, record)}>选择!</Button>
               }
               <Button type='link' onClick={this.handleEditTopic.bind(this, record)} disabled={this.isInclude(record)}>编辑</Button>
               <Popconfirm title={`你确定要删除该条题目吗？`}
@@ -363,7 +363,7 @@ class QuestionBank extends React.Component {
 
   // initData
   initData = async () => {
-    document.title = "题库管理";
+    document.title = "题目管理";
     await this.setState({ isLoading: true });
     await this.setState({ columns: this.state.defaultColumns });
     await this.props.dispatch({ type: 'questionBank/getQuestionBank' });
@@ -385,7 +385,7 @@ class QuestionBank extends React.Component {
                loading={this.state.isLoading}
                scroll={{ x: 'max-content' }}
                rowClassName={this.rowClassName}
-               bordered
+               // bordered
         />
 
         <Select
@@ -401,16 +401,16 @@ class QuestionBank extends React.Component {
     };
 
     return <div>
-
+      {/*标题栏*/}
       <PageHeader title={"题库管理（当前共" + this.props.tableDataSource.length + '题）'}
                   subTitle={'查看所有试题库，支持增删改查'}
                   extra={[
                     <span key="leftTop0">
-                      <Button onClick={this.showModal} icon={<FileAddOutlined />} type="primary">试题库状态</Button>
+                      <Button onClick={this.showModal} icon={<PieChartOutlined />} type="primary">概览功能</Button>
                     </span>,
                     <span style={{ margin: '0 15px' }} key="leftTop1">
                       <Badge count={this.props.testPaperGenList.length}>
-                        <Button onClick={this.showDrawer} icon={<FileAddOutlined/>} type="primary" id='leftTop1'>组卷列表</Button>
+                        <Button onClick={this.showDrawer} icon={<FileAddOutlined/>} type="primary" id='leftTop1'>已手动选择的题目</Button>
                       </Badge>
                     </span>,
                     <span key="leftTop2">
@@ -420,9 +420,14 @@ class QuestionBank extends React.Component {
                     </span>,
                   ]}
       />
-      <RenderDrawer show={this.state.isDrawerVisible} hide={this.hideDrawer}/>
+      {/*已手动选择的题目*/}
+      <RenderDrawer show={this.state.isDrawerVisible} hide={this.hideDrawer} />
+      {/*概览界面*/}
       <OverViewModal visible={this.state.modalVisible} hide={this.hideModal} dataSource={this.props.tableDataSource} eachChapterCount={this.props.eachChapterCount} />
-      {renderTable()}
+      {/*题库表格*/}
+      {
+        renderTable()
+      }
     </div>;
   }
 }

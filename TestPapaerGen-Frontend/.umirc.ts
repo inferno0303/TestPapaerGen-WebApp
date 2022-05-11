@@ -1,6 +1,7 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  mfsu: {},
   history: {
     type: 'hash'
   },
@@ -22,7 +23,8 @@ export default defineConfig({
         {exact: true, path: '/questionBank', component: '@/pages/questionBank'},
         {exact: true, path: '/questionEdit', component: '@/pages/questionEdit'},
         {exact: true, path: '/questionGenerator', component: '@/pages/questionGenerator'},
-        {exact: true, path: '/questionGenHistory', component: '@/pages/questionGenHistory'}
+        {exact: true, path: '/questionGenHistory', component: '@/pages/questionGenHistory'},
+        {exact: true, path: '/questionManager', component: '@/pages/questionManager'}
       ]
     }
   ],

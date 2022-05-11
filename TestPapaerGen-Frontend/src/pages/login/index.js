@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, history } from 'umi';
-import { Alert, Button, Form, Input, Radio, Modal } from 'antd';
+import { Alert, Button, Form, Input, Radio, Modal, Divider } from "antd";
 import { LockOutlined, LoginOutlined, UserOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import RegisteredModal from './registeredModal';
@@ -62,13 +62,13 @@ class Login extends React.Component {
   render() {
 
     const renderLoginTip = () => {
-      console.log(this.props.isLogin, this.props.username, this.props.user_role);
+      console.log("renderLoginTip", this.props.isLogin, this.props.username, this.props.user_role);
       if (this.props.isLogin === true) {
         return (
           <div>
             <Alert message={
-              <div>
-                <div style={{margin: '0 0 5px 0'}}>{this.props.username + "已登陆，用户类型：" + this.props.user_role}</div>
+              <div style={{fontSize: '0.8em'}}>
+                <div style={{margin: '0 0 5px 0'}}>{this.props.username + "已经登陆了，用户类型是：" + this.props.user_role}</div>
                 <div>
                   您可以：
                   <span className={styles.logout_btn} onClick={this.linkToPage}>进入首页</span>
@@ -78,11 +78,13 @@ class Login extends React.Component {
               </div>
             }
                    type="success"
-                   className={styles.login_status_tip}/>
+                   className={styles.login_status_tip}
+            />
+            <Divider />
           </div>
         )
       } else {
-        return <div className={styles.login_status_tip}>-</div>
+        return <div className={styles.login_status_tip}></div>
       }
     };
 
@@ -126,7 +128,7 @@ class Login extends React.Component {
     return (
       <div>
         <div className={styles.flex_column_wrapper}>
-          <span className={styles.welcome_text}>欢迎登陆《微机原理与技术接口》组卷系统</span>
+          <span className={styles.welcome_text}>欢迎使用《组卷系统》</span>
           {
             renderLoginTip()
           }

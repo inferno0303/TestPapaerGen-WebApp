@@ -9,7 +9,7 @@ export const Banner50DataSource = {
         name: 'title',
         children: (
           <span>
-            <p>微机原理与技术接口</p>
+            <p>组卷系统</p>
           </span>
         ),
         className: 'banner5-title',
@@ -17,14 +17,14 @@ export const Banner50DataSource = {
       {
         name: 'explain',
         className: 'banner5-explain',
-        children: '组卷系统',
+        children: '欢迎使用高效、快捷的自动组卷系统',
       },
       {
         name: 'content',
         className: 'banner5-content',
         children: (
           <span>
-            <p>高效、快捷、方便的组卷系统</p>
+            <p>可手动组卷，也可自动组卷</p>
           </span>
         ),
       },
@@ -35,7 +35,7 @@ export const Banner50DataSource = {
           href: '#/questionBank',
           className: 'banner5-button',
           type: 'primary',
-          children: '开始使用',
+          children: '开始使用！',
         },
       },
     ],

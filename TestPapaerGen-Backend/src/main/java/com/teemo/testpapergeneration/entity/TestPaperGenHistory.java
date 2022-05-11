@@ -10,6 +10,16 @@ public class TestPaperGenHistory {
     private Double average_difficulty;
     private Date update_time;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private String username;
+
     public Integer getId() {
         return id;
     }

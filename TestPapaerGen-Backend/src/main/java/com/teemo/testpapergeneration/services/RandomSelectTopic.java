@@ -8,6 +8,8 @@ import java.util.List;
 
 public class RandomSelectTopic {
 
+    // dataSourceList: 候选题目，除手动选择的
+    // targetDifficulty
     public List<QuestionBank> randomSelectTopic(List<QuestionBank> dataSourceList, double targetDifficulty, int selectCount) {
 
         // 0、准备返回值、合法性校验
@@ -52,7 +54,7 @@ public class RandomSelectTopic {
                 }
                 targetTopicList.add(targetTopic);
                 dataSourceList.remove(targetTopic);
-            }
+            } else break;
         }
         return targetTopicList;
     }

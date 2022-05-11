@@ -205,7 +205,7 @@ export function downloadFile() {
   document.body.append(a);
   const url = `${API}/getFile`;
   a.href = url;
-  a.download = '试卷.xml';
+  a.download = '试卷.docx';
   a.target = '_blank';
   a.click();
   a.remove();
