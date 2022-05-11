@@ -3,12 +3,21 @@ package com.teemo.testpapergeneration.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.teemo.testpapergeneration.entity.QuestionBank;
 import com.teemo.testpapergeneration.mapper.QuestionBankMapper;
+import com.teemo.testpapergeneration.services.ExcelReader;
 import com.teemo.testpapergeneration.utils.MyJsonResponse;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class QuestionBankController {
@@ -68,6 +77,35 @@ public class QuestionBankController {
         retJson.put("updateStatus", updateStatus);
         retJson.put("updateObject", questionBank);
         return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, retJson);
+    }
+
+    // 导入excel文件到数据库
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile multipartFile, @RequestParam("isDeleteAll") boolean isDeleteAll) {
+        System.out.println("file = " + multipartFile + ", isDeleteAll = " + isDeleteAll);
+        System.out.println("QuestionBankController.uploadFile");
+        System.out.println(multipartFile.getOriginalFilename() + " --> " + multipartFile.getSize() / 1024 + "k bytes");
+        // MultipartFile to File
+        // 获取文件名
+        String fileName = multipartFile.getOriginalFilename();
+        if (fileName == null || fileName.equals("")) {
+            fileName = "data.xlsx";
+        }
+        // 获取文件后缀
+        String prefix = fileName.substring(fileName.lastIndexOf("."));
+        // 创建 File
+        final File file;
+        try {
+            // 用uuid作为文件名，防止生成的临时文件重复
+            file = File.createTempFile(UUID.randomUUID().toString(), prefix);
+            multipartFile.transferTo(file);
+            ExcelReader excelReader = new ExcelReader(file);
+            excelReader.run();
+            System.out.println(file);
+        } catch (IOException | InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
+        return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, "retJson");
     }
 
     // 查询各Label1下的统计数量

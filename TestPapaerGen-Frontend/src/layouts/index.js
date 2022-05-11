@@ -43,11 +43,11 @@ class TopMenu extends React.Component {
       else return <Menu mode="horizontal" theme='dark' onClick={this.handleClick} selectedKeys={history.location.pathname}>
           <Menu.Item key="/home">
             <HomeOutlined />
-            系统首页
+            欢迎首页
           </Menu.Item>
           <Menu.Item key="/questionBank">
             <OrderedListOutlined />
-            全部试题
+            试题库显示
           </Menu.Item>
           {/*<Menu.Item key="/questionManager">*/}
           {/*  <HistoryOutlined />*/}
@@ -55,11 +55,11 @@ class TopMenu extends React.Component {
           {/*</Menu.Item>*/}
           <Menu.Item key="/questionEdit">
             <EditOutlined />
-            题目编辑
+            添加或修改
           </Menu.Item>
           <Menu.Item key="/questionGenerator">
             <FileAddOutlined />
-            组卷系统
+            组卷功能
           </Menu.Item>
           <Menu.Item key="/questionGenHistory">
             <HistoryOutlined />
@@ -67,6 +67,7 @@ class TopMenu extends React.Component {
           </Menu.Item>
           <Menu.Item key="/login" style={{float: 'right'}}>
             <UserOutlined />
+            退出登陆：
             {this.props.username}
           </Menu.Item>
         </Menu>

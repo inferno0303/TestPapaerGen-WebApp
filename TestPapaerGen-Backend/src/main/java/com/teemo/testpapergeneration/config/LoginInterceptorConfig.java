@@ -20,6 +20,6 @@ public class LoginInterceptorConfig extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginHandlerInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/hello", "/getLoginStatus", "/login", "/permission_denied", "/registered", "/static/**");
+                .excludePathPatterns("/hello", "/getLoginStatus", "/login", "/permission_denied", "/registered", "/static/**", "/upload");
     }
 }

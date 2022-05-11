@@ -416,7 +416,7 @@ class QuestionBank extends React.Component {
                     <span key="leftTop2">
                       <Button onClick={() => {
                         history.push('/questionEdit');
-                      }} icon={<FileAddOutlined />} type="primary">新增题目</Button>
+                      }} icon={<FileAddOutlined />} type="primary">添加题目</Button>
                     </span>,
                   ]}
       />

@@ -241,3 +241,24 @@ export function deleteQuestionGenHistoryByTestPaperUid(payload) {
     credentials: 'include'
   })
 }
+
+export function uploadFile(payload) {
+  const url = `${API}/upload`;
+  return request(url, {
+    method: 'post',
+    data: payload,
+    mode: 'cors',
+    credentials: 'include'
+  })
+}
+
+// export function uploadFile(payload) {
+//   const url = `${API}/upload`;
+//   console.log(payload.get('file'), "===")
+//   return axios({
+//     method: 'post',
+//     url,
+//     data: payload,
+//     withCredentials: true
+//   })
+// }

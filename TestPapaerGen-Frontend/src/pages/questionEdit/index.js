@@ -1,7 +1,21 @@
 import React from 'react';
-import { connect } from 'umi';
-import { Button, Form, Input, InputNumber, PageHeader, Select, Table, Tag } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
+import { connect, history } from "umi";
+import {
+  Badge,
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  PageHeader,
+  Radio,
+  Select,
+  Table,
+  Tag,
+  Upload
+} from "antd";
+import { CheckOutlined, FileAddOutlined, PieChartOutlined, CloudUploadOutlined } from "@ant-design/icons";
 import * as myUtils from '../../utils/myUtils';
 import style from './index.less';
 import { renderLoading } from '../../layouts/commonComponents';
@@ -16,7 +30,9 @@ class QuestionEdit extends React.Component {
       isInsertMode: true,
       formInitialValues: {
         score: 2
-      }
+      },
+      // 导入向导对话框是否显示
+      isImportWizardVisible: false,
     }
   }
 
@@ -36,13 +52,20 @@ class QuestionEdit extends React.Component {
     }
   };
 
+  // <状态> 导入excel文件到题库中 对话框 visible
+  changeImportWizardVisible = () => {
+    this.setState({isImportWizardVisible: !this.state.isImportWizardVisible})
+  }
+
 
   // initData
   initData = async () => {
     await this.setState({isLoading: true});
 
     // 判断是新增模式还是修改模式
+    // 如果是新增模式
     if (!this.props.location.query?.questionBankId) await this.setState({ isInsertMode: true });
+    // 否则是修改模式
     else {
       await this.setState({ isInsertMode: false });
       await this.props.dispatch({type: 'questionEdit/getQuestionBankById', payload: {id: this.props.location.query.questionBankId}});
@@ -190,17 +213,26 @@ class QuestionEdit extends React.Component {
       </div>
     };
 
-    const renderDispatch = () => {
-      return <div>
-        {renderForm()}
-      </div>
-    };
-
     return <div>
-      <PageHeader title={this.state.isInsertMode ? '题库编辑（新增模式）' : '题库编辑（修改模式）'}
+      <PageHeader title={this.state.isInsertMode ? '添加题目' : '正在编辑第' + this.props.location.query.questionBankId + '题的信息'}
                   subTitle={'支持题库的增删改'}
+                  extra={
+                    <Button type="primary"
+                            onClick={this.changeImportWizardVisible}
+                    >
+                      导入excel文件到题库中
+                    </Button>
+                  }
       />
-      {renderDispatch()}
+      {
+        renderForm()
+      }
+      {
+        <ImportWizard visible={this.state.isImportWizardVisible}
+                      changeVisible={this.changeImportWizardVisible}
+                      {...this.props}
+        />
+      }
     </div>;
   }
 }
@@ -211,3 +243,89 @@ function mapStateToProps({ questionEdit }) {
 }
 
 export default connect(mapStateToProps)(QuestionEdit);
+
+// <对话框> 导入excel文件到题库中
+class ImportWizard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      isDeleteAll: false,
+      file: null,
+      fileList: [],
+      uploadBtnLoading: false
+    }
+  }
+
+  uploadOnChange = async (data) => {
+    // 这里画蛇添足是为了解决 antd 的这个问题，so, fu*k antd!
+    // https://github.com/ant-design/ant-design/issues/2423
+    // 如果需求简单的话，建议用h5原生，不想折腾 upload 组件了，这个轮子不好用
+    await this.setState({
+      file: null,
+      fileList: [],
+    });
+    await this.setState({
+      file: data.file,
+      fileList: [data.file]
+    });
+  }
+
+  uploadFile = async () => {
+    await this.setState({uploadBtnLoading: true});
+    let formData = new FormData();
+    formData.append('file', this.state.file);
+    formData.append('isDeleteAll', this.state.isDeleteAll)
+    await this.props.dispatch({ type: 'questionEdit/uploadFile', payload: formData });
+    await this.setState({uploadBtnLoading: false});
+    await this.setState({
+      file: null,
+      fileList: []
+    })
+  }
+
+  render() {
+    return (
+      <Modal title="导入excel文件到题库中"
+             centered={true}
+             visible={this.props.visible}
+             onCancel={this.props.changeVisible}
+             footer={null}
+             width={'600px'}
+      >
+        <div style={{display: "flex", alignItems: "center", justifyContent: "center", margin: "20px auto"}}>
+          <Upload name="file"
+                  accept=".xlsx"
+                  multiple={false}
+                  beforeUpload={() => false} // 这里非常坑，在受控模式+手动上传时，要关闭这个钩子，不然会自动 delete fileList，导致 file 这个引用也会被删除，覆盖后变成 defaultFileList <Object[]>
+                  fileList={this.state.fileList}
+                  // showUploadList={false}
+                  onChange={this.uploadOnChange}
+          >
+            <Button type="primary">选择*.xlsx文件</Button>
+          </Upload>
+          {
+            this.state.file != null ?
+              <div>已选择了：{this.state.file.name}</div> :
+              null
+          }
+        </div>
+
+        <Checkbox style={{display: "flex", alignItems: "center", justifyContent: "center"}} checked={this.state.isDeleteAll}
+                  onChange={e => {this.setState({isDeleteAll: e.target.checked})}}
+        >
+          是否清空原来的题库？
+        </Checkbox>
+        <Button style={{display: "block", margin: "20px auto"}}
+                icon={<CloudUploadOutlined />}
+                type="primary"
+                loading={this.state.uploadBtnLoading}
+                disabled={this.state.file === null}
+                onClick={this.uploadFile}
+        >
+          确定导入
+        </Button>
+      </Modal>
+    )
+  }
+}

@@ -96,7 +96,19 @@ export default {
       } catch (e) {
         console.log(e)
       }
-    }
+    },
+
+    *uploadFile({payload}, {call, put}) {
+      try {
+        const res = yield call(requestService.uploadFile, payload);
+        if (checkCode(res)) {
+          message.success("上传文件成功", 2);
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
   },
   subscriptions: {}
 }

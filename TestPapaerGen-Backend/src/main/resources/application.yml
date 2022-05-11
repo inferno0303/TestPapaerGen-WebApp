@@ -8,7 +8,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/test_paper_generation?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
     username: root
     password: 1233211234567
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       max-lifetime: 30000
       minimum-idle: 3
