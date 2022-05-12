@@ -81,31 +81,72 @@ public class QuestionBankController {
 
     // 导入excel文件到数据库
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile multipartFile, @RequestParam("isDeleteAll") boolean isDeleteAll) {
-        System.out.println("file = " + multipartFile + ", isDeleteAll = " + isDeleteAll);
-        System.out.println("QuestionBankController.uploadFile");
-        System.out.println(multipartFile.getOriginalFilename() + " --> " + multipartFile.getSize() / 1024 + "k bytes");
-        // MultipartFile to File
-        // 获取文件名
-        String fileName = multipartFile.getOriginalFilename();
-        if (fileName == null || fileName.equals("")) {
-            fileName = "data.xlsx";
+    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("isDeleteAll") boolean isDeleteAll) {
+        // 判断一下是否要先 truncate
+        int deleteCount = 0;
+        int insertCount = 0;
+        if (isDeleteAll) {
+            List<QuestionBank> allQuestionBank = questionBankMapper.getAllQuestionBank();
+            for (QuestionBank questionBank : allQuestionBank) {
+                Integer id = questionBank.getId();
+                Integer n = questionBankMapper.deleteSingleQuestionBank(id);
+                deleteCount += n;
+            }
         }
-        // 获取文件后缀
-        String prefix = fileName.substring(fileName.lastIndexOf("."));
-        // 创建 File
-        final File file;
+        // 转换成输入流
+        InputStream inputStream;
         try {
-            // 用uuid作为文件名，防止生成的临时文件重复
-            file = File.createTempFile(UUID.randomUUID().toString(), prefix);
-            multipartFile.transferTo(file);
-            ExcelReader excelReader = new ExcelReader(file);
-            excelReader.run();
-            System.out.println(file);
-        } catch (IOException | InvalidFormatException e) {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, "retJson");
+        // 解析excel内容 -> json list
+        ExcelReader er = new ExcelReader(inputStream);
+        List<JSONObject> jsonObjectList = er.readExcel();
+        // 遍历插入
+
+        for (JSONObject jsonObject : jsonObjectList) {
+            QuestionBank questionBank = new QuestionBank();
+            // topic
+            String topic = jsonObject.getString("topic");
+            questionBank.setTopic(topic);
+            // topic_material_id
+            Integer topic_material_id = jsonObject.getInteger("topic_material_id");
+            questionBank.setTopic_material_id(topic_material_id);
+            // answer
+            String answer = jsonObject.getString("answer");
+            questionBank.setAnswer(answer);
+            // topic_type
+            String topic_type = jsonObject.getString("topic_type");
+            questionBank.setTopic_type(topic_type);
+            // score
+            Double score = jsonObject.getDouble("score");
+            questionBank.setScore(score);
+            // difficulty
+            Integer difficulty = jsonObject.getInteger("difficulty");
+            questionBank.setDifficulty(difficulty);
+            // chapter_1
+            String chapter_1 = jsonObject.getString("chapter_1");
+            questionBank.setChapter_1(chapter_1);
+            // chapter_2
+            String chapter_2 = jsonObject.getString("chapter_2");
+            questionBank.setChapter_2(chapter_2);
+            // label_1
+            String label_1 = jsonObject.getString("label_1");
+            questionBank.setLabel_1(label_1);
+            // label_2
+            String label_2 = jsonObject.getString("label_2");
+            questionBank.setLabel_2(label_2);
+            // update_time
+            questionBank.setUpdate_time(new Date());
+            // 数据库操作
+            Integer n = questionBankMapper.insertSingleQuestionBank(questionBank);
+            insertCount += n;
+        }
+        JSONObject rs = new JSONObject();
+        rs.put("deleteCount", deleteCount);
+        rs.put("insertCount", insertCount);
+        return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, rs);
     }
 
     // 查询各Label1下的统计数量

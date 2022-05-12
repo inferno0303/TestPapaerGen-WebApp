@@ -102,7 +102,7 @@ export default {
       try {
         const res = yield call(requestService.uploadFile, payload);
         if (checkCode(res)) {
-          message.success("上传文件成功", 2);
+          message.success(`成功导入${res.data.insertCount}条，删除了原有的${res.data.deleteCount}条.`, 3);
         }
       } catch (e) {
         console.log(e)

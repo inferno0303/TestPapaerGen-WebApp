@@ -53,7 +53,9 @@ class RenderDrawer extends React.Component {
                                       okText="确定"
                                       okButtonProps={{danger: true}}
                                       cancelText="取消"
-                                      placement="rightBottom">
+                                      placement="rightBottom"
+                                      key="2"
+                          >
                             <Button type='link' danger key='2'>清空全部</Button>
                           </Popconfirm>
                         ]}

@@ -58,4 +58,5 @@ public interface QuestionBankMapper {
     // 根据label1查询数量
     @Select("select count(*) from QuestionBank where score=#{score}")
     public Integer getQuestionBankCountByScore(Double score);
+
 }

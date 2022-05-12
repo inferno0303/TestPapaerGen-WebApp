@@ -230,7 +230,7 @@ class QuestionEdit extends React.Component {
       {
         <ImportWizard visible={this.state.isImportWizardVisible}
                       changeVisible={this.changeImportWizardVisible}
-                      {...this.props}
+                      { ...this.props }
         />
       }
     </div>;
@@ -282,6 +282,7 @@ class ImportWizard extends React.Component {
       file: null,
       fileList: []
     })
+    await this.props.changeVisible();
   }
 
   render() {
@@ -297,9 +298,10 @@ class ImportWizard extends React.Component {
           <Upload name="file"
                   accept=".xlsx"
                   multiple={false}
-                  beforeUpload={() => false} // 这里非常坑，在受控模式+手动上传时，要关闭这个钩子，不然会自动 delete fileList，导致 file 这个引用也会被删除，覆盖后变成 defaultFileList <Object[]>
+                  // 这里非常坑，在受控模式+手动上传时，要关闭这个钩子，不然会自动 delete fileList，导致 file 这个引用也会被删除，覆盖后变成 defaultFileList <Object[]>
+                  beforeUpload={() => false}
                   fileList={this.state.fileList}
-                  // showUploadList={false}
+                  showUploadList={false}
                   onChange={this.uploadOnChange}
           >
             <Button type="primary">选择*.xlsx文件</Button>
