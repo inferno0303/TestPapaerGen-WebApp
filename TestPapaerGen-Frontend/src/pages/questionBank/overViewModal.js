@@ -244,7 +244,7 @@ class OverViewModal extends React.Component {
         onOk={this.onOk}
         onCancel={this.onCancel}
         footer={null}
-        width={'80%'}
+        width={'70%'}
       >
         <div>
           {

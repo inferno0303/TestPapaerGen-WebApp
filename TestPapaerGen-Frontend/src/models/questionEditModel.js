@@ -10,6 +10,8 @@ export default {
     chapter2: [],
     label1: [],
     label2: [],
+    // 级联选择器
+    cascadeDS: {},
     editTarget: [],
   },
   reducers: {
@@ -37,16 +39,31 @@ export default {
       try {
         const res = yield call(requestService.getAllQuestionLabels);
         if(checkCode(res) && isArray(res.data)) {
-          let chapter_1 = [];
-          res.data.forEach(each => {
-            if (chapter_1.indexOf(each.chapter_1) === -1) chapter_1.push(each.chapter_1);
+          // 分门别类放好
+          let chapter1 = [];
+          let chapter2 = [];
+          let label1 = [];
+          let label2 = [];
+          res.data.forEach(item => {
+            // 如果不存在，那就往里面放，如果存在了，那就略过
+            if (chapter1.indexOf(item.chapter_1) === -1) chapter1.push(item.chapter_1);
+            if (chapter2.indexOf(item.chapter_2) === -1) chapter2.push(item.chapter_2);
+            if (label1.indexOf(item.label_1) === -1) label1.push(item.label_1);
+            if (label2.indexOf(item.label_2) === -1) label2.push(item.label_2);
           });
           yield put({ type: 'allQuestionLabels', payload: res.data });
-          yield put({type: 'chapter1', payload: chapter_1});
+          yield put({ type: 'chapter1', payload: chapter1 });
+          yield put({ type: 'chapter2', payload: chapter2 });
+          yield put({ type: 'label1', payload: label1 });
+          yield put({ type: 'label2', payload: label2 });
         }
       } catch (e) {
         console.log(e)
       }
+    },
+    // 实现选择器联动
+    cascadeSelector: function* ({payload}, {select, put}) {
+
     },
     filterChapter2ByChapter1: function* ({payload}, {select, put}) {
       let tmpArray = [];

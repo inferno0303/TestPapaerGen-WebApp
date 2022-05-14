@@ -199,6 +199,16 @@ export function randomSelect(payload) {
   })
 }
 
+export function geneticSelect(payload) {
+  const url = `${API}/geneticSelect`;
+  return request(url, {
+    method: 'post',
+    data: payload,
+    mode: 'cors',
+    credentials: 'include'
+  })
+}
+
 export function downloadFile() {
   // 文件下载
   const a = document.createElement('a');
@@ -252,13 +262,38 @@ export function uploadFile(payload) {
   })
 }
 
-// export function uploadFile(payload) {
-//   const url = `${API}/upload`;
-//   console.log(payload.get('file'), "===")
-//   return axios({
-//     method: 'post',
-//     url,
-//     data: payload,
-//     withCredentials: true
-//   })
-// }
+// 新 生成word接口
+export function questionGen2(payload) {
+  const url = `${API}/questionGen2`;
+  return request(url, {
+    method: 'post',
+    data: payload,
+    mode: 'cors',
+    credentials: 'include',
+    parseResponse: false // 关闭返回值简化
+  })
+}
+
+// 重新导出word接口
+export function reExportTestPaper(payload) {
+  const url = `${API}/reExportTestPaper`;
+  return request(url, {
+    method: 'get',
+    params: payload,
+    mode: 'cors',
+    credentials: 'include',
+    parseResponse: false // 关闭返回值简化
+  })
+}
+
+// 导出答案接口
+export function exportAnswer(payload) {
+  const url = `${API}/exportAnswer`;
+  return request(url, {
+    method: 'get',
+    params: payload,
+    mode: 'cors',
+    credentials: 'include',
+    parseResponse: false // 关闭返回值简化
+  })
+}

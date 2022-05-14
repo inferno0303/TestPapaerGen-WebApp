@@ -8,7 +8,7 @@ import {
   Input,
   InputNumber,
   PageHeader,
-  Popover,
+  Popover, Radio,
   Select,
   Spin,
   Switch,
@@ -32,29 +32,34 @@ class questionGenerator extends React.Component {
     super(props);
     this.state = {
       // 按钮loading
-      randomSelectBtnLoading: false,
+      btnLoading: false,
       genBtnLoading: false,
       // 组卷参数设置
-      testPaperName: '',
+      testPaperName: "试卷_" + new Date().getTime(),
       // 随机选择开关
       randomSwitch: true,
+      // 遗传算法
+      geneticSelect: 0,
+      // 迭代次数
+      iterationsNum: 30,
       TKTCount: 4,
       XZTCount: 4,
       PDTCount: 4,
       JDTCount: 2,
       averageDifficulty: 3,
-      chapter1Range: ['绪论', 'Intel8086微处理器', '宏汇编语言程序设计', 'Intel80486微处理器', '半导体存储器', 'I/O接口技术', '中断系统', '常用接口芯片'],
-      generateRange: ['绪论', 'Intel8086微处理器', '宏汇编语言程序设计', 'Intel80486微处理器', '半导体存储器', 'I/O接口技术', '中断系统', '常用接口芯片'],
+      chapter1Range: [],
+      generateRange: [],
     }
   }
 
   // btn handler
-  // 随机选择按钮
-  handleRandomSelect = async () => {
-    await this.setState({randomSelectBtnLoading: true});
+  // 自动组卷！
+  autoGenerate = async () => {
+    await this.setState({ btnLoading: true });
+    await this.props.dispatch({type: 'questionGenerator/emptyList'});
     let selectedTopicIds = [];
     await this.props.testPaperGenList.forEach(item => {selectedTopicIds.push(item.id)});
-    const payload = {
+    let payload = {
       selectedTopicIds: selectedTopicIds,
       TKTCount: this.state.TKTCount,
       XZTCount: this.state.XZTCount,
@@ -63,16 +68,20 @@ class questionGenerator extends React.Component {
       averageDifficulty: this.state.averageDifficulty,
       generateRange: this.state.generateRange
     };
-    await this.props.dispatch({type: 'questionGenerator/randomSelect', payload: payload});
-    await this.setState({randomSelectBtnLoading: false});
-
+    if (this.state.geneticSelect === 0) {
+      await this.props.dispatch({type: 'questionGenerator/randomSelect', payload: payload});
+    } else if (this.state.geneticSelect === 1) {
+      payload["iterationsNum"] = this.state.iterationsNum;
+      await this.props.dispatch({type: 'questionGenerator/geneticSelect', payload: payload});
+    }
+    await this.setState({btnLoading: false});
   };
   // 生成试卷按钮
   handleClickGenTestPaper = async () => {
     await this.setState({genBtnLoading: true});
     let questionIdList = [];
     await this.props.testPaperGenList.forEach(item => {questionIdList.push(item.id)});
-    await this.props.dispatch({type: 'questionGenerator/questionGen', payload: {questionIdList: questionIdList, randomSwitch: this.state.randomSwitch, testPaperName: this.state.testPaperName}});
+    await this.props.dispatch({type: 'questionGenerator/questionGen2', payload: {questionIdList: questionIdList, randomSwitch: this.state.randomSwitch, testPaperName: this.state.testPaperName}});
     await this.setState({genBtnLoading: false});
   };
 
@@ -185,11 +194,54 @@ class questionGenerator extends React.Component {
     }
   };
 
+  getVarianceEchartsOption = () => {
+    return {
+      xAxis: {
+        type: 'category',
+        name: '迭代次数'
+      },
+      yAxis: {
+        type: 'value',
+        name: '与预期难度的方差'
+      },
+      tooltip: {
+        trigger: 'axis',
+        formatter: '遗传迭代次数：{b}<br />当前方差： {c}'
+      },
+      series: [
+        {
+          data: this.props.variance,
+          type: 'line',
+          lineStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0, color: 'red' // 0% 处的颜色
+              }, {
+                offset: 1, color: 'blue' // 100% 处的颜色
+              }],
+              global: false // 缺省为 false
+            }
+          },
+          smooth: true
+        }
+      ]
+    };
+  };
+
   // non-jsx render（手动更新非react组件，比如绘制canvas）
 
   // init Data
   initData = async () => {
-
+    await this.props.dispatch({type: 'questionEdit/getAllQuestionLabels'});
+    this.setState({
+      chapter1Range: this.props.label1,
+      generateRange: this.props.label1
+    })
   };
 
 
@@ -214,6 +266,17 @@ class questionGenerator extends React.Component {
 
     const renderRandomTopic = () => {
       return <div>
+        {
+          this.state.geneticSelect === 1 ?
+            <div>
+              <Divider orientation='left' style={{fontWeight: 'bold', fontSize: '1em'}}>遗传迭代算法 「自动出题难度」与「预期难度」的方差变化</Divider>
+              <code style={{color: "#666", fontSize: "0.8em", paddingRight: "15px"}}>初始方差：{this.props.variance.length > 0 ? this.props.variance[0] : null}</code>
+              <code style={{color: "#666", fontSize: "0.8em", paddingRight: "15px"}}>方差收敛于：{this.props.variance.length > 0 ? this.props.variance[this.props.variance.length - 1] : null}</code>
+              <code style={{color: "#666", fontSize: "0.8em", paddingRight: "15px"}}>迭代次数：{this.props.variance.length}</code>
+              <ReactEcharts option={this.getVarianceEchartsOption()} id="variance" style={{ width: '100%', height: this.props.variance.length > 0 ? '250px' : '0', transition: 'all 1s' }} />
+            </div> :
+            null
+        }
         <Divider orientation='left' style={{fontWeight: 'bold'}}>填空题，共{this.props.TKTList.length}题</Divider>
         {
           this.props.TKTList.length > 0 ?
@@ -260,13 +323,13 @@ class questionGenerator extends React.Component {
     const renderSummary = () => {
       return <div>
         <div className={style.middle_line_space}>
-          <span>当前试卷题目总数：</span>
+          <span>题目总数：</span>
           <Tag>
             {this.getAllTopicCount()}
           </Tag>
         </div>
         <div className={style.middle_line_space}>
-          <span>当前试卷平均难度：</span>
+          <span>平均难度：</span>
           <Tag>
             {this.calcAllAvgDifficulty()}
           </Tag>
@@ -275,7 +338,7 @@ class questionGenerator extends React.Component {
           </Popover>
         </div>
         <div className={style.middle_line_space}>
-          <span>手动选择的题目数：</span>
+          <span>手动选择：</span>
           <Tag>{this.props.testPaperGenList.length}</Tag>
         </div>
         <div className={style.middle_line_space}>
@@ -288,11 +351,11 @@ class questionGenerator extends React.Component {
           </Popover>
         </div>
         <div className={style.middle_line_space}>
-          <span>系统自动出题的题目数：</span>
+          <span>自动出题数：</span>
           <Tag>{this.getRandomSelectTopicCount()}</Tag>
         </div>
         <div className={style.middle_line_space}>
-          <span>系统自动出题的难度：</span>
+          <span>自动出题难度：</span>
           <Tag>
             {this.calcRandomSelectTopicDifficulty()}
           </Tag>
@@ -300,6 +363,7 @@ class questionGenerator extends React.Component {
             <QuestionCircleOutlined />
           </Popover>
         </div>
+        <Divider/>
         <ReactEcharts option={this.getEchartsOption()} id="summary_echarts" style={{ width: '100%', height: this.getAllTopicCount() > 0 ? '180px' : '0', transition: 'all 1s' }} />
         <span>输入试卷名称（备注）：</span>
         <Input onChange={e => this.setState({testPaperName: e.target.value})}
@@ -311,6 +375,7 @@ class questionGenerator extends React.Component {
                 type='primary'
                 style={{display: 'block', margin: '5px auto'}}
                 loading={this.state.genBtnLoading}
+                disabled={this.props.testPaperGenList.length + this.props.TKTList.length + this.props.PDTList.length + this.props.JDTList.length + this.props.XZTList.length <= 0 }
         >
           立即生成试卷word文档
         </Button>
@@ -324,17 +389,18 @@ class questionGenerator extends React.Component {
             <span>试卷随机出题总数：</span>
             <Tag>{this.state.TKTCount + this.state.XZTCount + this.state.PDTCount + this.state.JDTCount}</Tag>
           </div>
+          <Divider />
           <div className={style.middle_line_space}>自动出 填空题 总数：</div>
           <InputNumber type='number' min={1} max={100} value={this.state.TKTCount} onChange={value => this.setState({TKTCount: value})} className={style.wrapper_params_input} />
           <div className={style.middle_line_space}>自动出 选择题 总数：</div>
           <InputNumber type='number' min={1} max={100} value={this.state.XZTCount} onChange={value => value ? this.setState({XZTCount: value}) : null} className={style.wrapper_params_input} />
           <div className={style.middle_line_space}>自动出 判断题 总数：</div>
           <InputNumber type='number' min={1} max={100} value={this.state.PDTCount} onChange={value => value ? this.setState({PDTCount: value}) : null} className={style.wrapper_params_input} />
-          <div className={style.middle_line_space}>自动出 程序设计题和程序阅读题 总数：</div>
+          <div className={style.middle_line_space}>自动出 简答题 总数：</div>
           <InputNumber type='number' min={1} max={100} value={this.state.JDTCount} onChange={value => value ? this.setState({JDTCount: value}) : null} className={style.wrapper_params_input} />
           <div className={style.middle_line_space}>设置总体难度：</div>
           <InputNumber type='number' min={1} max={5} value={this.state.averageDifficulty} onChange={value => value ? this.setState({averageDifficulty: value}) : null} className={style.wrapper_params_input} />
-          <div className={style.middle_line_space}>设置总体出题知识点范围：</div>
+          <div className={style.middle_line_space}>设置出题知识点：</div>
           <Select
             mode="multiple"
             style={{ width: '100%' }}
@@ -347,11 +413,18 @@ class questionGenerator extends React.Component {
             ))}
           </Select>
           <Divider />
+          <Radio.Group onChange={e => this.setState({geneticSelect: e.target.value})} value={this.state.geneticSelect}>
+            <Radio value={0}>贪心最优算法</Radio>
+            <Radio value={1}>遗传迭代算法</Radio>
+          </Radio.Group>
+          <div className={style.middle_line_space}>设置遗传迭代次数：</div>
+          <InputNumber type='number' min={0} max={10000} value={this.state.iterationsNum} disabled={this.state.geneticSelect !== 1} onChange={value => value ? this.setState({iterationsNum: value}) : null} className={style.wrapper_params_input} />
+          <Divider />
           <Tooltip placement="topLeft" title="结果会显示在左侧【自动组卷】面板">
             <Button icon={<CheckCircleOutlined />}
-                    onClick={this.handleRandomSelect}
+                    onClick={this.autoGenerate}
                     type='primary'
-                    loading={this.state.randomSelectBtnLoading}
+                    loading={this.state.btnLoading}
                     style={{display: 'block', margin: '5px auto', width: '130px'}}
             >
               自动组卷！
@@ -372,14 +445,14 @@ class questionGenerator extends React.Component {
         {/*左侧题目预览*/}
         {/*手动出题预览*/}
         <div className={style.wrapper_left_side}>
-          <Card title={<span className={style.preview_title}>手动出题，当前共{this.props.testPaperGenList.length}题</span>}>
+          <Card title={<span className={style.preview_title}>手动出题，当前已手动选择{this.props.testPaperGenList.length}题</span>}>
             {renderManualTopic()}
           </Card>
           <Divider />
           {/*自动组卷预览*/}
           {
             this.state.randomSwitch ?
-              <Card title={<span className={style.preview_title}>自动组卷</span>}>
+              <Card title={<span className={style.preview_title}>自动组卷 {this.state.geneticSelect === 1 ? <Tag color="magenta">遗传迭代算法</Tag> : <Tag color="geekblue">贪心最优算法</Tag>}</span>}>
                 {renderRandomTopic()}
               </Card> :
               null
@@ -400,7 +473,7 @@ class questionGenerator extends React.Component {
         </div>
         {/*右侧生成试卷功能*/}
         <div className={style.wrapper_right_side}>
-          <Card title={<span className={style.preview_title}>生成试卷word文档</span>}>
+          <Card title={<span className={style.preview_title}>这份试卷的统计信息</span>}>
             {renderSummary()}
           </Card>
         </div>
@@ -409,9 +482,10 @@ class questionGenerator extends React.Component {
   }
 }
 
-function mapStateToProps({ questionGenerator }) {
-  const { testPaperGenList, TKTList, PDTList, JDTList, XZTList } = questionGenerator;
-  return { testPaperGenList, TKTList, PDTList, JDTList, XZTList };
+function mapStateToProps({ questionGenerator, questionEdit }) {
+  const { testPaperGenList, TKTList, PDTList, JDTList, XZTList, variance } = questionGenerator;
+  const { allQuestionLabels, chapter1, chapter2, label1, label2 } = questionEdit;
+  return { testPaperGenList, TKTList, PDTList, JDTList, XZTList, variance, allQuestionLabels, chapter1, chapter2, label1, label2 };
 }
 
 export default connect(mapStateToProps)(questionGenerator);

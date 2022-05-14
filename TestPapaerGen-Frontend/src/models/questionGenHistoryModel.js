@@ -1,6 +1,7 @@
 import * as requestService from '../services/requestServices';
 import { checkCode, isArray } from '../utils/myUtils';
 import { message } from 'antd';
+import { exportAnswer } from "../services/requestServices";
 
 export default {
   namespace: 'questionGenHistory',
@@ -50,6 +51,42 @@ export default {
       }
     },
 
+    *reExportTestPaper({payload}, {call, put}) {
+      try {
+        const res = yield call(requestService.reExportTestPaper, payload);
+        res.blob().then(b => {
+          let a = document.createElement("a");
+          a.href = URL.createObjectURL(b);
+          a.download = "试卷导出.docx";
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          URL.revokeObjectURL(a.href);
+          a.remove();
+        })
+      } catch (e) {
+        throw e
+      }
+    },
+
+    *exportAnswer({payload}, {call, put}) {
+      try {
+        const res = yield call(requestService.exportAnswer, payload);
+        res.blob().then(b => {
+          let a = document.createElement("a");
+          a.href = URL.createObjectURL(b);
+          a.download = "答案导出.docx";
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          URL.revokeObjectURL(a.href);
+          a.remove();
+        })
+      } catch (e) {
+        throw e
+      }
+    },
+
     *deleteQuestionGenHistoryByTestPaperUid({payload}, {call, put}) {
       try {
         const res = yield call(requestService.deleteQuestionGenHistoryByTestPaperUid,payload);
@@ -60,7 +97,7 @@ export default {
       } catch (e) {
         console.log(e)
       }
-    }
+    },
 
   },
   subscriptions: {}

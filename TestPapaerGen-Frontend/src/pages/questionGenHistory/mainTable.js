@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Popconfirm, Popover, Table } from 'antd';
+import { Button, Dropdown, Menu, Popconfirm, Popover, Table } from "antd";
+import { SmileOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import style from '../questionBank/index.less';
 
@@ -56,6 +57,12 @@ export default class MainTable extends React.Component {
         className: style.column_small_text,
         render: (record) => <div>
           <Button type='link' onClick={this.getReport.bind(this, record)}>查看详情</Button>
+          <Dropdown overlay={<Menu onClick={this.reExport.bind(this, record)}>
+            <Menu.Item key="1"><Button type="link">试卷(*.docx)</Button></Menu.Item>
+            <Menu.Item key="2"><Button type="link">答案(*.docx)</Button></Menu.Item>
+            </Menu>} placement="bottom" arrow>
+            <Button type="link">重新导出</Button>
+          </Dropdown>
           {
             this.props.username === record.username ?
               <Popconfirm title={`你确定要删除该历史记录吗？`}
@@ -93,6 +100,33 @@ export default class MainTable extends React.Component {
     });
     await this.setState({dataLoading: false});
   };
+
+  reExport = async (record, e) => {
+    console.log(record, e)
+    // 导出试卷
+    if (e.key === "1") {
+      console.log(record.test_paper_uid);
+      await this.props.dispatch({
+        type: 'questionGenHistory/reExportTestPaper',
+        payload: {test_paper_uid: record.test_paper_uid}
+      });
+    }
+    // 导出答案
+    if (e.key === "2") {
+      await this.props.dispatch({
+        type: 'questionGenHistory/exportAnswer',
+        payload: {test_paper_uid: record.test_paper_uid}
+      });
+    }
+  }
+
+  // 重新导出的下拉菜单
+  menu = (
+    <Menu onClick={this.reExport}>
+      <Menu.Item key="1"><Button type="link">试卷(*.docx)</Button></Menu.Item>
+      <Menu.Item key="2"><Button type="link">答案(*.docx)</Button></Menu.Item>
+    </Menu>
+  );
 
   renderTable = () => {
     return (

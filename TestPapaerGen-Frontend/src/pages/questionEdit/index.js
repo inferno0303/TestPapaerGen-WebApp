@@ -214,7 +214,7 @@ class QuestionEdit extends React.Component {
     };
 
     return <div>
-      <PageHeader title={this.state.isInsertMode ? '添加题目' : '正在编辑第' + this.props.location.query.questionBankId + '题的信息'}
+      <PageHeader title={this.state.isInsertMode ? '添加题目' : '正在修改'}
                   subTitle={'支持题库的增删改'}
                   extra={
                     <Button type="primary"

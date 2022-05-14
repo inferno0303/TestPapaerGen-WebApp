@@ -5,6 +5,7 @@ import com.teemo.testpapergeneration.mapper.TestPaperGenHistoryMapper;
 import com.teemo.testpapergeneration.utils.MyJsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,4 +26,5 @@ public class TestPaperGenHistoryController {
         List<TestPaperGenHistory> testPaperGenHistories = testPaperGenHistoryMapper.queryAllTestPaperGenHistory();
         return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, testPaperGenHistories);
     };
+
 }

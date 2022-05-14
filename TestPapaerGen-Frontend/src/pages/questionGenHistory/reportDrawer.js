@@ -13,7 +13,7 @@ class ReportDrawer extends React.Component {
   }
 
   initData = async () => {
-
+    console.log()
   };
 
   componentWillMount() {
@@ -168,7 +168,7 @@ class ReportDrawer extends React.Component {
   // 取试卷名字
   getTestPaperName = () => {
     if (this.props.testPaperReportQuestionList.length <= 0) return null
-    if (this.props.testPaperReportQuestionList[0].test_paper_name == "") {
+    if (this.props.testPaperReportQuestionList[0].test_paper_name === "") {
       return "《未命名试卷》";
     } else {
       return `《${this.props.testPaperReportQuestionList[0].test_paper_name}》`;

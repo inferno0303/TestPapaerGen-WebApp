@@ -387,15 +387,17 @@ class QuestionBank extends React.Component {
                rowClassName={this.rowClassName}
                // bordered
         />
-
+        <span style={{color: "#666", fontSize: "0.8em"}}>控制表格显示的字段</span>
         <Select
           mode="multiple"
-          style={{ width: '100%' }}
+          style={{ width: '80%', margin: "20px auto 80px auto" }}
           placeholder="Please select"
           defaultValue={this.state.columnTitle}
           onChange={this.handleColumnVisible}
         >
-          {this.state.columnTitle.map((item, index) => <Select.Option key={index} value={item}>{item}</Select.Option>)}
+          {
+            this.state.columnTitle.map((item, index) => <Select.Option key={index} value={item}>{item}</Select.Option>)
+          }
         </Select>
       </div>;
     };
