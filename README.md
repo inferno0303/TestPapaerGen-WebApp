@@ -1,16 +1,18 @@
 # 在线组卷系统
 
-## 毕设助攻，发邮件770409504@qq.com，1对1定制，可加急
+## 毕设助攻
+
+**发邮件770409504@qq.com，1对1定制，可加急**
 
 ## 介绍
 
 名称：在线组卷系统 - TestPapaerGen
 
-简介：在线组卷系统，题库管理 + 试卷手动/根据规则自动生成，输出排版美观的 word 文档文件
+简介：自动组卷系统，遗传算法、贪心算法，支持导入题库，手动选择、自动组卷，生成排版美观的Word文档，前后端分离WebApp，Java SpringBoot + React
 
 技术栈：后端 Java SpringBoot + 前端 React Umi.js
 
-类型：前后端分离应用，WebApp，外包项目
+类型：WebApp
 
 ## 安装
 
@@ -23,8 +25,6 @@ TestPapaerGen-Frontend：前端
 数据库表结构：数据库
 
 assets：示例文件
-
-文档：一些文档
 
 ### 如何运行
 
@@ -44,10 +44,10 @@ npm start
 npm build
 ```
 
-数据库：记得导入数据库表结构，默认utf8mb4。
+数据库：记得导入数据库表结构，默认utf8mb4，数据库表结构sql文件已包含建库、建表语句。
 
 ```shell
-mysql -u root -h host -p < test_paper_generation_xxx.sql
+mysql -u root -h host -p < xxx.sql
 ```
 
 ## 功能
@@ -60,57 +60,49 @@ mysql -u root -h host -p < test_paper_generation_xxx.sql
 6. 出题历史，如字面意思，可查看出卷历史，统计出卷难度，复盘试卷题型；
 7. 完善的可视化统计，各种炫酷的图表，可视化汇报数据状态，基于Echarts。
 
-## 效果
+## 运行
 
-### 组卷排版效果
+### 视频演示
+
+视频演示点击这里👉[视频演示](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt-20220517.mp4)
 
 示例文件见 assets 文件夹
-
-![06-自动组卷效果](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/06-自动组卷效果.63hnjdsqs300.png)
-
-### 登陆页
-
-![00-组卷系统登录页](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/00-组卷系统登录页.1r781xqtyye8.png)
-
 
 
 ### 欢迎首页
 
-![01-组卷系统首页](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/01-组卷系统首页.5spluxqitqw0.png)
-
-
+![欢迎首页](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.5wazm0ht27k0.webp)
 
 ### 题库管理
 
-![02-组卷系统题库](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/02-组卷系统题库.fjvrgl2vm4g.png)
+![题库管理](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.6k3izqsxtig0.webp)
 
+### 导出试卷文档
 
+- 支持导出word格式文档
+- 支持导出参考答案
+
+![导出试卷文档](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.4aw16jt2ug60.webp)
+
+### 导入题库
+
+- 支持导入Excel格式的题库
+
+![导入题库](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.3kga2ktq36u0.webp)
 
 ### 题库概览
 
-![03-组卷系统题库概览](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/03-组卷系统题库概览.q2a26v1ojww.png)
-
-
-
-### 手动组卷
-
-![04-手动组卷](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/04-手动组卷.6jd8jnn871o0.png)
-
-
+![题库概览](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.4d4a464c2xs0.webp)
 
 ### 自动组卷
 
-![05-自动组卷](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/05-自动组卷.4apturplzdi0.png)
-
-
+![自动组卷](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.6j183ph2n600.webp)
 
 ### 出题历史
 
-![07-出题历史](https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/07-出题历史.1om6b3odqnts.png)
+![出题历史](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.1sb3o45h1u4g.webp)
 
-### 出题历史试卷详情
+### 注册账户、管理员账户
 
-<img src="https://cdn.jsdelivr.net/gh/yangxu770409504/assets@main/20210527/08-出题历史试卷详情.5we1hifr3pw0.png" alt="08-出题历史试卷详情" style="zoom:25%;" />
-
-
+![注册账户、管理员账户](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.2eqpbzzben28.webp)
 
