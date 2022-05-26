@@ -1,7 +1,26 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  // 加速构建
   mfsu: {},
+  targets: {
+    chrome: 79,
+    firefox: false,
+    safari: false,
+    edge: false,
+    ios: false,
+  },
+  nodeModulesTransform: {
+    type: 'none',
+    exclude: [],
+  },
+  // cdn目录
+  // publicPath: "/static/",
+  // runtimePublicPath: true,
+  // 按需加载
+  // dynamicImport: {
+  //   loading: "@/layouts/loading"
+  // },
   history: {
     type: 'hash'
   },

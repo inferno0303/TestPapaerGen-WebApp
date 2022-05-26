@@ -13,7 +13,6 @@ class ReportDrawer extends React.Component {
   }
 
   initData = async () => {
-    console.log()
   };
 
   componentWillMount() {

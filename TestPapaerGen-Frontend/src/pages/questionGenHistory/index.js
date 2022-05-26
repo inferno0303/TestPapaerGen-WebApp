@@ -27,17 +27,7 @@ class QuestionGenHistory extends React.Component {
     this.setState({ isReportDrawerVisible: false })
   };
 
-
-  // initData
-  initData = async () => {
-    await this.setState({isLoading: true});
-    await delay(500);
-    await this.setState({isLoading: false});
-  };
-
-  // lifeCycle
   componentDidMount() {
-    this.initData().then(null);
   }
 
   render() {
@@ -45,11 +35,12 @@ class QuestionGenHistory extends React.Component {
     return (
       <div>
         <PageHeader title={'出题历史'} subTitle={'支持查看出题历史和试卷报告'} />
-        <div className={style.main_wrapper}>
+        <div style={{margin: "0 auto"}}>
           <MainTable dataSource={this.props.testPaperGenHistories}
                      dispatch={this.props.dispatch}
                      showReportDrawer={this.showReportDrawer}
                      username={this.props.username}
+                     loading={this.state.isLoading}
           />
         </div>
         <ReportDrawer visible={this.state.isReportDrawerVisible}

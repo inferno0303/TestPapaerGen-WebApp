@@ -35,7 +35,6 @@ export default {
   effects: {
 
     *resetLoginStatus({payload}, {call, put}) {
-      console.log("===重置前端登陆状态===");
       yield put({ type: 'isLogin', payload: false });
       yield put({ type: 'username', payload: null });
       yield put({ type: 'user_role', payload: null });
@@ -45,7 +44,6 @@ export default {
     *getLoginStatus({payload}, {call, put}) {
       try {
         const res = yield call(rqs.getLoginStatus);
-        console.log(res);
         if (res.code === 200) {
           yield put({ type: 'isLogin', payload: true });
           yield put({ type: 'username', payload: res.data.username });

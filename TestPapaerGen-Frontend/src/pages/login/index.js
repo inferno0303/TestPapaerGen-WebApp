@@ -62,7 +62,6 @@ class Login extends React.Component {
   render() {
 
     const renderLoginTip = () => {
-      console.log("renderLoginTip", this.props.isLogin, this.props.username, this.props.user_role);
       if (this.props.isLogin === true) {
         return (
           <div>

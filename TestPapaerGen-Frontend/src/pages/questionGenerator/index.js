@@ -41,12 +41,12 @@ class questionGenerator extends React.Component {
       // 遗传算法
       geneticSelect: 0,
       // 迭代次数
-      iterationsNum: 30,
-      TKTCount: 4,
-      XZTCount: 4,
-      PDTCount: 4,
+      iterationsNum: 400,
+      TKTCount: 10,
+      XZTCount: 10,
+      PDTCount: 5,
       JDTCount: 2,
-      averageDifficulty: 3,
+      averageDifficulty: 2.75,
       chapter1Range: [],
       generateRange: [],
     }

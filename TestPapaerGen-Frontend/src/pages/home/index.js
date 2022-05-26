@@ -8,21 +8,17 @@ class Home extends React.Component {
     this.state = {}
   }
 
-
-  // lifeCycle
   componentDidMount() {
-
   }
 
   render() {
     return <div>
-      <HomeTemplate/>
+      <HomeTemplate />
     </div>;
   }
 }
 
 function mapStateToProps(state) {
-  console.log(state.global);
   return {};
 }
 

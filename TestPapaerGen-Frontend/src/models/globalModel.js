@@ -1,8 +1,6 @@
 export default {
   namespace: 'global',
-  state: {
-    flag: 'hello world'
-  },
+  state: {},
   reducers: {},
   effects: {},
   subscriptions: {}

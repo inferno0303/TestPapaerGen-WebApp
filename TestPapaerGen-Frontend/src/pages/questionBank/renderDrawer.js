@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Collapse, Descriptions, Drawer, PageHeader, Popconfirm, Tag } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExportOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { myEmptyStatus } from '../../layouts/commonComponents';
 import { connect, history } from 'umi';
@@ -47,7 +47,7 @@ class RenderDrawer extends React.Component {
             <PageHeader title={"已手动选择的题目"}
                         subTitle={'确认完成后请点击「导出word」按钮'}
                         extra={[
-                          <Button type='primary' onClick={this.nextStep} key='1'>导出word</Button>,
+                          <Button type='primary' onClick={this.nextStep} key='1' icon={<ExportOutlined />}>生成组卷</Button>,
                           <Popconfirm title={`你确定要清空组卷列表吗？`}
                                       onConfirm={this.removeAll}
                                       okText="确定"

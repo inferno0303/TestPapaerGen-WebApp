@@ -43,6 +43,19 @@ public class QuestionBankController {
         return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, questionBankList);
     }
 
+    @GetMapping(value = "/getTopicType", produces = "text/plain;charset=UTF-8")
+    public String getTopicType() {
+        List<String> topicType = questionBankMapper.getDistinctTopicType();
+        return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, topicType);
+    }
+
+    @GetMapping(value = "/searchQuestionByTopic", produces = "text/plain;charset=UTF-8")
+    public String searchQuestionByTopic(@RequestParam("topicType") String topicType,
+                                 @RequestParam("keyword") String keyword) {
+        List<QuestionBank> questions = questionBankMapper.searchQuestionByTopic(topicType, keyword);
+        return myJsonResponse.make200Resp(MyJsonResponse.default_200_response, questions);
+    }
+
     @PostMapping(value = "/insertSingleQuestionBank")
     public String insertSingleQuestionBank(@RequestBody QuestionBank questionBank) {
         questionBank.setUpdate_time(new Date());

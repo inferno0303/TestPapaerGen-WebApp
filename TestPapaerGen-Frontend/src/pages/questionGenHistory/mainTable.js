@@ -1,8 +1,10 @@
 import React from 'react';
 import { Button, Dropdown, Menu, Popconfirm, Popover, Table } from "antd";
-import { SmileOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import style from '../questionBank/index.less';
+import ModifyTestPaper from "./modifyTestPaper";
+import {delay} from "../../utils/myUtils";
 
 export default class MainTable extends React.Component {
   constructor(props) {
@@ -61,8 +63,9 @@ export default class MainTable extends React.Component {
             <Menu.Item key="1"><Button type="link">试卷(*.docx)</Button></Menu.Item>
             <Menu.Item key="2"><Button type="link">答案(*.docx)</Button></Menu.Item>
             </Menu>} placement="bottom" arrow>
-            <Button type="link">重新导出</Button>
+            <Button type="link" onClick={this.reExport.bind(this, record)}>重新导出</Button>
           </Dropdown>
+          <Button type='link' onClick={this.changeModifyTestPaperVisible.bind(this, record)}>修改组卷</Button>
           {
             this.props.username === record.username ?
               <Popconfirm title={`你确定要删除该历史记录吗？`}
@@ -81,8 +84,12 @@ export default class MainTable extends React.Component {
       },
     ];
     this.state = {
-      dataLoading: false,
-      tableWidth: 'max-content'
+      loading: false,
+      tableWidth: 'max-content',
+      // 重新组卷
+      modifyTestPaperVisible: false,
+      // 重新组卷当前选中的试卷uid
+      record: null,
     }
   }
 
@@ -120,6 +127,17 @@ export default class MainTable extends React.Component {
     }
   }
 
+  // <状态> 修改组卷 对话框 visible
+  changeModifyTestPaperVisible = async (record) => {
+    // ES2020 optional chaining
+    const test_paper_uid = record?.test_paper_uid?? null
+    if (test_paper_uid !== null) {
+      await this.setState({record: record})
+    }
+    await this.setState({modifyTestPaperVisible: !this.state.modifyTestPaperVisible})
+    await this.props.dispatch({type:'questionGenHistory/getAllTestPaperGenHistory'});
+  }
+
   // 重新导出的下拉菜单
   menu = (
     <Menu onClick={this.reExport}>
@@ -128,32 +146,37 @@ export default class MainTable extends React.Component {
     </Menu>
   );
 
-  renderTable = () => {
-    return (
-      <div>
-        <Table columns={this.columns}
-               dataSource={this.props.dataSource}
-               scroll={{ x: this.state.tableWidth }}
-               bordered
-        />
-      </div>
-    )
-  };
-
   initData = async () => {
-    await this.setState({dataLoading: true});
+    await this.setState({loading: true})
     await this.props.dispatch({type:'questionGenHistory/getAllTestPaperGenHistory'});
-    await this.setState({dataLoading: false});
+    await delay(800);
+    await this.setState({loading: false})
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.initData().then(() => null)
   }
 
   render() {
+    const renderTable = () => {
+      return (
+          <Table columns={this.columns}
+                 dataSource={this.props.dataSource}
+                 scroll={{x: this.state.tableWidth}}
+                 loading={this.state.loading ? {size: "large", indicator: <LoadingOutlined/>} : false}
+                 bordered
+                 style={{margin: "0 30px"}}
+          />
+      )
+    };
     return (
       <div>
-        {this.renderTable()}
+        {renderTable()}
+        <ModifyTestPaper visible={this.state.modifyTestPaperVisible}
+                         changeVisible={this.changeModifyTestPaperVisible}
+                         record={this.state.record}
+                         { ...this.props }
+        />
       </div>
     );
   }

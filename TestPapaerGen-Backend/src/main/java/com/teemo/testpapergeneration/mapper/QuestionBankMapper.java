@@ -11,6 +11,11 @@ public interface QuestionBankMapper {
     @Select("select * from QuestionBank order by update_time desc")
     public List<QuestionBank> getAllQuestionBank();
 
+    @Select("SELECT DISTINCT topic_type FROM QuestionBank")
+    public List<String> getDistinctTopicType();
+
+    public List<QuestionBank> searchQuestionByTopic(String topicType, String keyword);
+
     @Insert("insert into QuestionBank" +
             "(topic, topic_material_id, answer, topic_type, score, " +
             "difficulty, chapter_1, chapter_2, label_1, label_2," +

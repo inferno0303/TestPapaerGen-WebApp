@@ -297,3 +297,36 @@ export function exportAnswer(payload) {
     parseResponse: false // 关闭返回值简化
   })
 }
+
+// 获取所有题目类型
+export function getTopicType(payload) {
+  const url = `${API}/getTopicType`;
+  return request(url, {
+    method: "get",
+    params: payload,
+    mode: "cors",
+    credentials: "include",
+  })
+}
+
+// 搜索题目
+export function searchQuestionByTopic(payload) {
+  const url = `${API}/searchQuestionByTopic`;
+  return request(url, {
+    method: "get",
+    params: payload,
+    mode: "cors",
+    credentials: "include",
+  })
+}
+
+// 新 更新已经组卷的题目
+export function updateQuestionGenHistory(payload) {
+  const url = `${API}/updateQuestionGenHistory`;
+  return request(url, {
+    method: 'post',
+    data: payload,
+    mode: 'cors',
+    credentials: 'include',
+  })
+}

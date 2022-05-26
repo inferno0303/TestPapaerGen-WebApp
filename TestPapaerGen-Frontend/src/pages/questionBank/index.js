@@ -44,7 +44,7 @@ class QuestionBank extends React.Component {
           title: '题目',
           dataIndex: 'topic',
           key: 'topic',
-          width: 300,
+          width: 400,
           ...this.getColumnSearchProps('topic'),
           className: style.column_small_text,
         },
@@ -53,7 +53,7 @@ class QuestionBank extends React.Component {
           dataIndex: 'topic_type',
           key: 'topic_type',
           className: style.column_small_text,
-          width: 110,
+          width: 100,
           render: (text) => renderTopicType(text),
           filters: [
             {
@@ -86,7 +86,7 @@ class QuestionBank extends React.Component {
           key: 'score',
           className: style.column_small_text,
           width: 85,
-          render: (text) => <Tag>{text}</Tag>,
+          render: (text) => <Tag>{text}分</Tag>,
           sorter: (a, b) => a.score - b.score,
           sortDirections: ['descend', 'ascend'],
         },
@@ -94,7 +94,7 @@ class QuestionBank extends React.Component {
           title: '答案',
           dataIndex: 'answer',
           key: 'answer',
-          width: 120,
+          width: 180,
           className: style.column_small_text,
           ...this.getColumnSearchProps('answer'),
         },
@@ -102,59 +102,15 @@ class QuestionBank extends React.Component {
           title: '大知识点',
           dataIndex: 'label_1',
           key: 'label_1',
-          width: 150,
+          width: 130,
           className: style.column_small_text,
-          render: (text) => <Tag>{text}</Tag>,
-          filters: [
-            {
-              text: '绪论',
-              value: '绪论',
-            },
-            {
-              text: 'Intel8086微处理器',
-              value: 'Intel8086微处理器',
-            },
-            {
-              text: '宏汇编语言程序设计',
-              value: '宏汇编语言程序设计',
-            },
-            {
-              text: 'Intel80486微处理器',
-              value: 'Intel80486微处理器',
-            },
-            {
-              text: '半导体存储器',
-              value: '半导体存储器',
-            },
-            {
-              text: 'I/O接口技术',
-              value: 'I/O接口技术',
-            },
-            {
-              text: '中断系统',
-              value: '中断系统',
-            },
-            {
-              text: '常用接口芯片',
-              value: '常用接口芯片',
-            },
-            {
-              text: '总线',
-              value: '总线',
-            },
-            {
-              text: '典型微型计算机系统',
-              value: '典型微型计算机系统',
-            },
-          ],
-          filterMultiple: true,
-          onFilter: (value, record) => record?.label_1?.indexOf(value) === 0,
+          render: (text) => <Tag>{text}</Tag>
         },
         {
           title: '小知识点',
           dataIndex: 'label_2',
           key: 'label_2',
-          width: 200,
+          width: 130,
           className: style.column_small_text,
           render: (text) => <Tag>{text}</Tag>,
         },
@@ -163,19 +119,19 @@ class QuestionBank extends React.Component {
           dataIndex: 'chapter_1',
           key: 'chapter_1',
           className: style.column_small_text,
-          width: 85,
+          width: 80,
         },
         {
           title: '小章节',
           dataIndex: 'chapter_2',
           key: 'chapter_2',
           className: style.column_small_text,
-          width: 85,
+          width: 80,
         },
         {
           title: '操作',
           key: 'action',
-          width: 250,
+          width: 230,
           className: style.column_small_text,
           render: (record) => (
             <div>
@@ -203,7 +159,7 @@ class QuestionBank extends React.Component {
           dataIndex: 'difficulty',
           key: 'difficulty',
           className: style.column_small_text,
-          width: 85,
+          width: 80,
           sorter: (a, b) => a.difficulty - b.difficulty,
           sortDirections: ['descend', 'ascend'],
         },
@@ -212,7 +168,7 @@ class QuestionBank extends React.Component {
           dataIndex: 'update_time',
           key: 'update_time',
           className: style.column_small_text,
-          width: 140,
+          width: 180,
           render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
           sorter: (a, b) => a.update_time - b.update_time,
           sortDirections: ['descend', 'ascend'],
@@ -244,11 +200,11 @@ class QuestionBank extends React.Component {
     this.setState({modalVisible: false})
   };
 
-  handleAddTestPaperGenList = record => {
-    this.props.dispatch({ type: 'questionGenerator/addTestPaperGenList', payload: record });
+  handleAddTestPaperGenList = async record => {
+    await this.props.dispatch({ type: 'questionGenerator/addTestPaperGenList', payload: record });
   };
-  handleRemoveTestPaperGenList = record => {
-    this.props.dispatch({ type: 'questionGenerator/removeTestPaperGenList', payload: record });
+  handleRemoveTestPaperGenList = async record => {
+    await this.props.dispatch({ type: 'questionGenerator/removeTestPaperGenList', payload: record });
   };
   handleEditTopic = async record => {
     history.push(`/questionEdit?questionBankId=${record.id}`);
@@ -274,7 +230,12 @@ class QuestionBank extends React.Component {
   // calc
   // 判断record是否在this.props.testPaperGenList中
   isInclude = record => {
-    return this.props.testPaperGenList.includes(record);
+    console.log(record)
+    for (let i = 0; i < this.props.testPaperGenList.length; i++) {
+      const item = this.props.testPaperGenList[i]
+      if (item.id === record.id) return true
+    }
+    // return this.props.testPaperGenList.includes(record);
   };
 
   // table 的 search filter功能

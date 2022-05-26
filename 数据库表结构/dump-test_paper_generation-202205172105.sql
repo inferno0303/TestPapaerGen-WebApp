@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS `test_paper_generation` DEFAULT CHARACTER SET utf8mb4;
-
 DROP TABLE IF EXISTS `QuestionBank`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;

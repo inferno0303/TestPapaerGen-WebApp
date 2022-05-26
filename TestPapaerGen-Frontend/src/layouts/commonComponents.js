@@ -1,16 +1,17 @@
 import style from './commonStyleSheet.less';
-import { Empty, Spin } from 'antd';
-import { FrownTwoTone } from '@ant-design/icons';
+import {Empty, Skeleton, Spin} from 'antd';
+import {FrownTwoTone, LoadingOutlined} from '@ant-design/icons';
 import React from 'react';
 
 
 // render loading placeholder, show msg in the middle area.
 export const renderLoading = (msg, height) => (
   <div className={style.loading_wrapper} style={{height: height ?? null}}>
-    <Spin size='large' />
-    <div>{msg}</div>
+      <Spin size="large" indicator={<LoadingOutlined />} tip={msg ?? "加载中"} />
   </div>
 );
+
+export const skeleton = <Skeleton active />
 
 // render empty placeholder, show msg in the middle area.
 // selected option: height, if height is null, default is 50vh
