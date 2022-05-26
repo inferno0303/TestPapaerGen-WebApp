@@ -322,9 +322,7 @@ class QuestionBank extends React.Component {
     }
   };
 
-  // initData
   initData = async () => {
-    document.title = "题目管理";
     await this.setState({ isLoading: true });
     await this.setState({ columns: this.state.defaultColumns });
     await this.props.dispatch({ type: 'questionBank/getQuestionBank' });
@@ -332,7 +330,6 @@ class QuestionBank extends React.Component {
     await this.setState({ isLoading: false });
   };
 
-  // lifeCycle
   componentDidMount() {
     this.initData().then(null);
   }

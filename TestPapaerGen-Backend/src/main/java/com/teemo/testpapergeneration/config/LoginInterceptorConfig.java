@@ -13,6 +13,7 @@ public class LoginInterceptorConfig extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //添加资源映射
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 
@@ -20,6 +21,21 @@ public class LoginInterceptorConfig extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginHandlerInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/hello", "/getLoginStatus", "/login", "/permission_denied", "/registered", "/static/**", "/upload");
+                .excludePathPatterns(
+                        // 测试
+                        "/hello",
+                        // 登录相关
+                        "/getLoginStatus",
+                        "/login",
+                        "/permission_denied",
+                        "/registered",
+                        // 静态资源
+                        "/",
+                        "/static/**",
+                        "/*.html",
+                        "/*.css",
+                        "/*.js",
+                        "/favicon.*"
+                );
     }
 }

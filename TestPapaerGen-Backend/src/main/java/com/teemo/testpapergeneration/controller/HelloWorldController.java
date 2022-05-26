@@ -2,8 +2,8 @@ package com.teemo.testpapergeneration.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 
 @RestController
@@ -18,10 +18,11 @@ public class HelloWorldController {
     };
 
     @GetMapping("/")
-    public ModelAndView index() {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("forward:/index.html");
-        return mv;
+    public void index(HttpServletResponse httpServletResponse) throws IOException {
+//        ModelAndView mv = new ModelAndView();
+//        mv.setViewName("forward:/static/index.html");
+//        return "redirect:/static/index.html";
+        httpServletResponse.sendRedirect("/static/index.html");
     }
 
 }

@@ -1,3 +1,2 @@
-// 后端端口号
-const backendPort = 8081;
+// 在本地用8000调试的时候生效
 export const API = window.location.origin.replace(":8000", ":8081");
