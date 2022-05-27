@@ -102,6 +102,10 @@ mysql -u root -h host -p < xxx.sql
 
 ![出题历史](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.1sb3o45h1u4g.webp)
 
+### 支持重新编辑历史组卷（新增）
+
+![支持重新编辑历史组卷](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/截图.69vgw091ob00.webp)
+
 ### 注册账户、管理员账户
 
 ![注册账户、管理员账户](https://cdn.jsdelivr.net/gh/inferno0303/assets@main/2022/zjxt.2eqpbzzben28.webp)
